@@ -103,11 +103,11 @@ function showUploadCertificate(){
 };
 
 function showViewCertificates(callbackObj, resObj){
-    var forceReply = JSON.stringify(
-                          {force_reply:true}
-                        );
-
-    sendMessage(callbackObj.message.chat.id, "Absolutely! Just tell me your outlook id without @deloitte.com:", resObj, forceReply);
+  var forceReply = JSON.stringify(
+                        {force_reply:true}
+                      );
+  answerCallbackQuery(callbackObj.id, resObj);
+  sendMessage(callbackObj.message.chat.id, "Absolutely! Just tell me your outlook id without @deloitte.com:", resObj, forceReply);
 };
 
 function sendMessage(chatID, responseMsg, resObj, inlineKeyboardMarkup=''){
@@ -128,6 +128,24 @@ function sendMessage(chatID, responseMsg, resObj, inlineKeyboardMarkup=''){
       resObj.end('Error :' + err)
     })
 };
+
+function answerCallbackQuery(chatID, resObj){
+
+  axios.post('https://api.telegram.org/bot553303104:AAEVsFhPt0fa8Yw2jJIEcvOOMd7RAmqWjaE/answerCallbackQuery', {
+      callback_query_id: chatID
+    })
+    .then(response => {
+      // We get here if the message was successfully posted
+      console.log('Message posted');
+      resObj.end('ok');
+    })
+    .catch(err => {
+      // ...and here if it was not
+      console.log('Error :', err)
+      resObj.end('Error :' + err)
+    })
+
+}
 
 // Finally, start our server
 app.listen(app.get('port'), function() {
