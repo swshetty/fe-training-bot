@@ -20,10 +20,19 @@ app.get('/', function (req, res) {
 //This is the route the API will call
 app.post('/new-message', function(req, res) {
   //console.log("req == "+JSON.stringify(req));
-  const {message} = req.body
-  console.log("req == "+JSON.stringify(message));
+  const {message} = req.body;
+  const {callback_query} = req.body;
 
-  parseMessage(message, res);
+  
+
+  if(message){
+    console.log("message == "+JSON.stringify(message));
+    parseMessage(message, res);  
+  }else if(callback_query){
+    console.log("callback_query == "+JSON.stringify(callback_query));
+    res.end('ok');
+  }
+  
 
   
 
