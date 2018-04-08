@@ -1,0 +1,28 @@
+{
+  "name": "fe-training-bot",
+  "version": "1.0.0",
+  "description": "A telegram bot that accepts a users name and a certificate for a specific completed training and keeps track of those.",
+  "engines": {
+    "node": "6.11.1"
+  },
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/swshetty/fe-training-bot.git"
+  },
+  "author": "Swastik Shetty",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/swshetty/fe-training-bot.git/issues"
+  },
+  "homepage": "https://github.com/swshetty/fe-training-bot.git#readme",
+  "dependencies": {
+    "axios": "^0.17.1",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+  }
+}
