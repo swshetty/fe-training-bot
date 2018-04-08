@@ -1,16 +1,19 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
+var session = require('express-session');
 const axios = require('axios');
 
 app.set('port', (process.env.PORT || 5000))
 
+app.use(session({secret: 'ssshhhhh'}));
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({
   extended: true
 })); // for parsing application/x-www-form-urlencoded
 
 
+var sess;
 // index
 app.get('/', function (req, res) {
   res.send('hello world i am a secret bot')
@@ -51,7 +54,8 @@ function parseMessage(message, resObj){
 
   if(message.entities && message.entities[0].type == "bot_command"){
     if(message.text && message.text.toLowerCase() == "/start"){
-      
+      sess = req.session;
+
       var inlineKeyboardMarkup = JSON.stringify(
                               {
                                 inline_keyboard: [
@@ -65,8 +69,14 @@ function parseMessage(message, resObj){
     }else{
       sendMessage(message.chat.id, "Sorry, i dont understand that message", resObj);
     }
+  }else if(message.entities && message.entities[0].type == "mention"){
+    if (sess.action == "view"){
+      sendMessage(message.chat.id, "Cool. Will fetch from mondoDB", resObj);  
+    }
+    if (sess.action == "upload"){
+      sendMessage(message.chat.id, "Cool. TBD - Show list of certificates", resObj);  
+    }
   }else{
-    console.log('In here.....now what????');
     sendMessage(message.chat.id, "Sorry, i dont understand that message", resObj);
   }
 
@@ -78,10 +88,12 @@ function parseCallback(callbackObj, resObj){
   }
 
   if(callbackObj.data && callbackObj.data.toLowerCase() == "upload"){
+    sess.action = "upload";
     showUploadCertificate(callbackObj, resObj);
   }
 
   if(callbackObj.data && callbackObj.data.toLowerCase() == "view"){
+    sess.action = "view";
     showViewCertificates(callbackObj, resObj);
   }
 };
@@ -95,7 +107,7 @@ function showViewCertificates(callbackObj, resObj){
                           {force_reply:true}
                         );
 
-    sendMessage(callbackObj.message.chat.id, "Absolutely! Just tell me your outlook id without @deloitte.com:", resObj);
+    sendMessage(callbackObj.message.chat.id, "Absolutely! Just tell me your outlook id without @deloitte.com:", resObj, forceReply);
 };
 
 function sendMessage(chatID, responseMsg, resObj, inlineKeyboardMarkup=''){
