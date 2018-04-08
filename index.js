@@ -19,10 +19,10 @@ app.get('/', function (req, res) {
 
 //This is the route the API will call
 app.post('/new-message', function(req, res) {
-  console.log("req == "+JSON.stringify(req));
+  //console.log("req == "+JSON.stringify(req));
   const {message} = req.body
   console.log("req == "+JSON.stringify(message));
-  
+
   //Each message contains "text" and a "chat" object, which has an "id" which is the chat id
   if (!message || message.text.toLowerCase().indexOf('marco') <0) {
     // In case a message is not present, or if our message does not have the word marco in it, do nothing and return an empty response
