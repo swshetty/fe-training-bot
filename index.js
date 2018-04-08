@@ -60,9 +60,14 @@ function parseMessage(message, resObj){
 };
 
 function sendMessage(chatID, responseMsg, resObj){
+  var inlineKeyboardMarkup = [
+                              [{text: "Option 1", callback_data: "option_1"}],
+                              [{text: "Option 2", callback_data: "option_2"}]
+                              ];
   axios.post('https://api.telegram.org/bot553303104:AAEVsFhPt0fa8Yw2jJIEcvOOMd7RAmqWjaE/sendMessage', {
       chat_id: chatID,
-      text: responseMsg
+      text: responseMsg,
+      reply_markup: inlineKeyboardMarkup
     })
     .then(response => {
       // We get here if the message was successfully posted
