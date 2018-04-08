@@ -106,7 +106,7 @@ function showViewCertificates(callbackObj, resObj){
   var forceReply = JSON.stringify(
                         {force_reply:true}
                       );
-  answerCallbackQuery(callbackObj.id, resObj);
+  answerCallbackQuery(callbackObj.message.chat.id, resObj);
   sendMessage(callbackObj.message.chat.id, "Absolutely! Just tell me your outlook id without @deloitte.com:", resObj, forceReply);
 };
 
