@@ -30,7 +30,7 @@ app.post('/new-message', function(req, res) {
   // If we've gotten this far, it means that we have received a message containing the word "marco".
   // Respond by hitting the telegram bot API and responding to the approprite chat_id with the word "Polo!!"
   // Remember to use your own API toked instead of the one below  "https://api.telegram.org/bot<your_api_token>/sendMessage"
-  sendMessage(message.chat.id, 'Polo!!', res);
+  //sendMessage(message.chat.id, 'Polo!!', res);
 
 });
 
@@ -48,10 +48,14 @@ function parseMessage(message, resObj){
   if(message.entities && message.entities[0].type == "bot_command"){
     if(message.text && message.text.toLowerCase() == "/start"){
       sendMessage(message.chat.id, "Great, good choice. I can help with following items today", resObj);
+    }else{
+      sendMessage(message.chat.id, "Sorry, i dont understand that message", resObj);
     }
+  }else{
+    sendMessage(message.chat.id, "Sorry, i dont understand that message", resObj);
   }
 
-  sendMessage(message.chat.id, "Sorry, i dont understand that message", resObj);
+  
 
 };
 
