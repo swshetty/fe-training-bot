@@ -51,11 +51,22 @@ function parseMessage(message, resObj){
 
   if(message.entities && message.entities[0].type == "bot_command"){
     if(message.text && message.text.toLowerCase() == "/start"){
-      sendMessage(message.chat.id, "hey there! I can help with the following requests today:", resObj);
+      
+      var inlineKeyboardMarkup = JSON.stringify(
+                              {
+                                inline_keyboard: [
+                                                [{text: "Upload My Certificate", callback_data: "upload"}],
+                                                [{text: "View My Uploaded Certificates", callback_data: "view"}]
+                                              ]
+                              }
+                            );
+
+      sendMessage(message.chat.id, "hey there! I can help with the following requests today:", resObj, inlineKeyboardMarkup);
     }else{
       sendMessage(message.chat.id, "Sorry, i dont understand that message", resObj);
     }
   }else{
+    console.log('In here.....now what????');
     sendMessage(message.chat.id, "Sorry, i dont understand that message", resObj);
   }
 
@@ -80,22 +91,18 @@ function showUploadCertificate(){
 };
 
 function showViewCertificates(callbackObj, resObj){
-    sendMessage(callbackObj.message.chat.id, "Absolutely! Just tell me your outlook id without @deloitte.com:", resObj);
+    var forceReply = JSON.stringify(
+                          {force_reply: 'true'}
+                        );
+    sendMessage(callbackObj.message.chat.id, "Absolutely! Just tell me your outlook id without @deloitte.com:", resObj, forceReply);
 };
 
-function sendMessage(chatID, responseMsg, resObj){
-  var inlineKeyboardMarkup = JSON.stringify(
-                              {
-                                inline_keyboard: [
-                                                [{text: "Upload My Certificate", callback_data: "upload"}],
-                                                [{text: "View My Uploaded Certificates", callback_data: "view"}]
-                                              ]
-                              }
-                            );
+function sendMessage(chatID, responseMsg, resObj, inlineKeyboardMarkup=''){
+  
   axios.post('https://api.telegram.org/bot553303104:AAEVsFhPt0fa8Yw2jJIEcvOOMd7RAmqWjaE/sendMessage', {
       chat_id: chatID,
       text: responseMsg,
-      reply_markup: ""
+      reply_markup: inlineKeyboardMarkup
     })
     .then(response => {
       // We get here if the message was successfully posted
