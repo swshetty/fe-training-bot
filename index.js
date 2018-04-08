@@ -30,7 +30,7 @@ app.post('/new-message', function(req, res) {
     parseMessage(message, res);  
   }else if(callback_query){
     console.log("callback_query == "+JSON.stringify(callback_query));
-    res.end('ok');
+    parseCallback(callback_query, res);
   }
   
 
@@ -45,18 +45,13 @@ app.post('/new-message', function(req, res) {
 
 function parseMessage(message, resObj){
   //Each message contains "text" and a "chat" object, which has an "id" which is the chat id
-  // if (!message || message.text.toLowerCase().indexOf('marco') <0) {
-  //   // In case a message is not present, or if our message does not have the word marco in it, do nothing and return an empty response
-  //   return resObj.end()
-  // }
-
   if(!message){
     return resObj.end();
   }
 
   if(message.entities && message.entities[0].type == "bot_command"){
     if(message.text && message.text.toLowerCase() == "/start"){
-      sendMessage(message.chat.id, "Great, good choice. I can help with following items today", resObj);
+      sendMessage(message.chat.id, "hey there! I can help with the following requests today:", resObj);
     }else{
       sendMessage(message.chat.id, "Sorry, i dont understand that message", resObj);
     }
@@ -64,23 +59,43 @@ function parseMessage(message, resObj){
     sendMessage(message.chat.id, "Sorry, i dont understand that message", resObj);
   }
 
-  
+};
 
+function parseCallback(callbackObj, resObj){
+  if(!callbackObj){
+    return resObj.end();
+  }
+
+  if(callbackObj.data && callbackObj.data.toLowerCase() == "upload"){
+    showUploadCertificate(callbackObj, resObj);
+  }
+
+  if(callbackObj.data && callbackObj.data.toLowerCase() == "view"){
+    showViewCertificates(callbackObj, resObj);
+  }
+};
+
+function showUploadCertificate(){
+
+};
+
+function showViewCertificates(callbackObj, resObj){
+    sendMessage(callbackObj.message.chat.id, "Absolutely! Just tell me your outlook id without @deloitte.com:", resObj);
 };
 
 function sendMessage(chatID, responseMsg, resObj){
   var inlineKeyboardMarkup = JSON.stringify(
                               {
                                 inline_keyboard: [
-                                                [{text: "Option 1", callback_data: "option_1"}],
-                                                [{text: "Option 2", callback_data: "option_2"}]
+                                                [{text: "Upload My Certificate", callback_data: "upload"}],
+                                                [{text: "View My Uploaded Certificates", callback_data: "view"}]
                                               ]
                               }
                             );
   axios.post('https://api.telegram.org/bot553303104:AAEVsFhPt0fa8Yw2jJIEcvOOMd7RAmqWjaE/sendMessage', {
       chat_id: chatID,
       text: responseMsg,
-      reply_markup: inlineKeyboardMarkup
+      reply_markup: ""
     })
     .then(response => {
       // We get here if the message was successfully posted
