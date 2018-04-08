@@ -94,8 +94,8 @@ function showViewCertificates(callbackObj, resObj){
     var forceReply = JSON.stringify(
                           {force_reply:true}
                         );
-    
-    sendMessage(callbackObj.message.chat.id, "Absolutely! Just tell me your outlook id without @deloitte.com:", resObj, forceReply);
+
+    sendMessage(callbackObj.message.chat.id, "Absolutely! Just tell me your outlook id without @deloitte.com:", resObj);
 };
 
 function sendMessage(chatID, responseMsg, resObj, inlineKeyboardMarkup=''){
