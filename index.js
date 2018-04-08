@@ -30,7 +30,7 @@ app.post('/new-message', function(req, res) {
 
   if(message){
     console.log("message == "+JSON.stringify(message));
-    parseMessage(message, res);  
+    parseMessage(message, req, res);  
   }else if(callback_query){
     console.log("callback_query == "+JSON.stringify(callback_query));
     parseCallback(callback_query, res);
@@ -46,7 +46,7 @@ app.post('/new-message', function(req, res) {
 
 });
 
-function parseMessage(message, resObj){
+function parseMessage(message, reqObj, resObj){
   //Each message contains "text" and a "chat" object, which has an "id" which is the chat id
   if(!message){
     return resObj.end();
@@ -54,7 +54,7 @@ function parseMessage(message, resObj){
 
   if(message.entities && message.entities[0].type == "bot_command"){
     if(message.text && message.text.toLowerCase() == "/start"){
-      sess = req.session;
+      sess = reqObj.session;
 
       var inlineKeyboardMarkup = JSON.stringify(
                               {
