@@ -32,21 +32,12 @@ app.post('/new-message', function(req, res) {
   // Respond by hitting the telegram bot API and responding to the approprite chat_id with the word "Polo!!"
   // Remember to use your own API toked instead of the one below  "https://api.telegram.org/bot<your_api_token>/sendMessage"
   axios.post('https://api.telegram.org/bot553303104:AAEVsFhPt0fa8Yw2jJIEcvOOMd7RAmqWjaE/sendMessage', {
-    chat_id: message.chat.id,
-    text: 'Polo!!'
-  })
+      chat_id: message.chat.id,
+      text: 'Polo!!'
+    })
     .then(response => {
       // We get here if the message was successfully posted
       console.log('Message posted');
-
-      // send mail with defined transport object
-      transporter.sendMail(mailOptions, function(error, info){
-          if(error){
-              return console.log(error);
-          }
-          console.log('Email sent: ' + info.response);
-      });
-      
       res.end('ok');
     })
     .catch(err => {
