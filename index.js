@@ -69,9 +69,10 @@ function parseMessage(message, reqObj, resObj){
     }else{
       sendMessage(message.chat.id, "Sorry, i dont understand that message", resObj);
     }
-  }else if(message.entities && message.entities[0].type == "mention"){
+  }else if(message.reply_to_message){
+    console.log("WHAT IS IN THE SESSION: "+sess.action);
     if (sess.action == "view"){
-      sendMessage(message.chat.id, "Cool. Will fetch from mondoDB", resObj);  
+      sendMessage(message.chat.id, "Cool. Will fetch from mondoDB " +message.text, resObj);  
     }
     if (sess.action == "upload"){
       sendMessage(message.chat.id, "Cool. TBD - Show list of certificates", resObj);  
