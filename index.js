@@ -32,9 +32,14 @@ app.post('/new-message', function(req, res) {
   // If we've gotten this far, it means that we have received a message containing the word "marco".
   // Respond by hitting the telegram bot API and responding to the approprite chat_id with the word "Polo!!"
   // Remember to use your own API toked instead of the one below  "https://api.telegram.org/bot<your_api_token>/sendMessage"
+  sendMessage(message.chat.id, 'Polo!!');
+
+});
+
+function sendMessage(chatID, responseMsg){
   axios.post('https://api.telegram.org/bot553303104:AAEVsFhPt0fa8Yw2jJIEcvOOMd7RAmqWjaE/sendMessage', {
-      chat_id: message.chat.id,
-      text: 'Polo!!'
+      chat_id: chatID,
+      text: responseMsg
     })
     .then(response => {
       // We get here if the message was successfully posted
@@ -46,8 +51,7 @@ app.post('/new-message', function(req, res) {
       console.log('Error :', err)
       res.end('Error :' + err)
     })
-
-});
+};
 
 // Finally, start our server
 app.listen(app.get('port'), function() {
