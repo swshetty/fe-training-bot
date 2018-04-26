@@ -98,7 +98,7 @@ function parseCallback(callbackObj, resObj){
   }else if(callbackObj.data && callbackObj.data.toLowerCase() == "view"){
     sess.action = "view";
     askforUsername(callbackObj, resObj);
-  }else(callbackObj.data){
+  }else{
     sess.course = callbackObj.data.toLowerCase();
     console.log("selected course == "+ sess.course);
   }
