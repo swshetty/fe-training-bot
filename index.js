@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 const axios = require('axios');
 const mongodb = require('mongodb');
-let mongoURI = 'mongodb://swshetty:Roman@123@ds139459.mlab.com:39459/fecertificates';
+let mongoURI = 'mongodb://swshetty:Roman123@ds157639.mlab.com:57639/fecertificates';
 
 app.set('port', (process.env.PORT || 5000))
 
