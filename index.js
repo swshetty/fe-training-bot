@@ -136,7 +136,7 @@ function showCertificates(username, chatId, respObj){
       let chatMessage = "<b>Previously Uploaded Certificates for :"+username+"</b>"+
                         "<i>"+docs[0].certificates.toString()+"</i>";
 
-      sendMessage(chatId, chatMessage, respObj, null, 'HTML');
+      sendMessage(chatId, chatMessage, respObj, undefined,'HTML');
 
     });
 
