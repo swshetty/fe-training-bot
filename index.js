@@ -138,6 +138,7 @@ function showCertificates(username, chatId, respObj){
                           <i>"+docs[0].certificates.toString()+"</i>
                         </pre>";
 
+
       sendMessage(chatId, chatMessage, respObj, undefined,'HTML');
 
     });
