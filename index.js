@@ -114,6 +114,7 @@ function askforUsername(callbackObj, resObj){
 }
 
 function selectCourse(username, chatId, respObj){
+  sess.username = username;
   var inlineKeyboardMarkup = JSON.stringify(
                               {
                                 inline_keyboard: [
@@ -126,7 +127,7 @@ function selectCourse(username, chatId, respObj){
                               }
                             );
 
-  sendMessage(chatId, "Please select a course certificate to upload:", resObj, inlineKeyboardMarkup);
+  sendMessage(chatId, "Please select a course certificate to upload:", respObj, inlineKeyboardMarkup);
   
 };
 
