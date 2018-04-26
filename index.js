@@ -78,7 +78,8 @@ function parseMessage(message, reqObj, resObj){
       showCertificates(message.text, message.chat.id, resObj);
     }
     if (sess.action == "upload"){
-      sendMessage(message.chat.id, "Cool. TBD - ask which certificate to upload", resObj);  
+      //sendMessage(message.chat.id, "Cool. TBD - ask which certificate to upload", resObj);
+      selectCourse(message.text, message.chat.id, resObj);
     }
   }else{
     sendMessage(message.chat.id, "Sorry, i dont understand that message", resObj);
@@ -94,12 +95,14 @@ function parseCallback(callbackObj, resObj){
   if(callbackObj.data && callbackObj.data.toLowerCase() == "upload"){
     sess.action = "upload";
     askforUsername(callbackObj, resObj);
-  }
-
-  if(callbackObj.data && callbackObj.data.toLowerCase() == "view"){
+  }else if(callbackObj.data && callbackObj.data.toLowerCase() == "view"){
     sess.action = "view";
     askforUsername(callbackObj, resObj);
+  }else(callbackObj.data){
+    sess.course = callbackObj.data.toLowerCase();
+    console.log("selected course == "+ sess.course);
   }
+
 };
 
 function askforUsername(callbackObj, resObj){
@@ -110,8 +113,21 @@ function askforUsername(callbackObj, resObj){
   sendMessage(callbackObj.message.chat.id, "Absolutely! Just tell me your outlook id without @deloitte.com:", resObj, forceReply);
 }
 
-function showUploadCertificate(){
+function selectCourse(username, chatId, respObj){
+  var inlineKeyboardMarkup = JSON.stringify(
+                              {
+                                inline_keyboard: [
+                                                [{text: "HTML5", callback_data: "HTML5"}],
+                                                [{text: "CSS Essential Training 3", callback_data: "CSS Essential Training 3"}],
+                                                [{text: "Learning App Building with Vanilla JavaScript", callback_data: "Learning App Building with Vanilla JavaScript"}],
+                                                [{text: "NodeJS – Essential Training", callback_data: "NodeJS – Essential Training"}],
+                                                [{text: "Learning Git & Github", callback_data: "Learning Git & Github"}]
+                                              ]
+                              }
+                            );
 
+  sendMessage(chatId, "Please select a course certificate to upload:", resObj, inlineKeyboardMarkup);
+  
 };
 
 function showCertificates(username, chatId, respObj){
@@ -133,7 +149,7 @@ function showCertificates(username, chatId, respObj){
       console.log("Found the following records");
       console.log(docs);
 
-      let chatMessage = "<b>Previously Uploaded Certificates for : "+username+"</b>"+
+      let chatMessage = "<b>Previously Uploaded Certificates by you: "+"</b>"+
                           "<i>"+docs[0].certificates.toString()+"</i>";
 
       sendMessage(chatId, chatMessage, respObj, undefined,'HTML');
