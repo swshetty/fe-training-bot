@@ -134,9 +134,9 @@ function showCertificates(username, chatId, respObj){
       console.log(docs);
 
       let chatMessage = "<b>Previously Uploaded Certificates for :"+username+"</b>"+
-                        "<i>"+docs[0].certificates.toString();+"</i>";
+                        "<i>"+docs[0].certificates.toString()+"</i>";
 
-      sendMessage(chatId, chatMessage, respObj);
+      sendMessage(chatId, chatMessage, respObj,,'HTML');
     });
 
     client.close();
