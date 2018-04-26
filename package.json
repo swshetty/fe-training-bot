@@ -24,6 +24,7 @@
     "axios": "^0.17.1",
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
-    "express-session": "^1.7.6"
+    "express-session": "^1.7.6",
+    "mongodb": "^3.0.5"
   }
 }

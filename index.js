@@ -3,6 +3,8 @@ var app = express();
 var bodyParser = require('body-parser');
 var session = require('express-session');
 const axios = require('axios');
+const mongodb = require('mongodb');
+let mongoURI = 'mongodb://swshetty:Roman@123@ds139459.mlab.com:39459/fecertificates';
 
 app.set('port', (process.env.PORT || 5000))
 
@@ -72,10 +74,11 @@ function parseMessage(message, reqObj, resObj){
   }else if(message.reply_to_message){
     console.log("WHAT IS IN THE SESSION: "+sess.action);
     if (sess.action == "view"){
-      sendMessage(message.chat.id, "Cool. Will fetch from mondoDB " +message.text, resObj);  
+      //sendMessage(message.chat.id, "Cool. Will fetch from mondoDB " +message.text, resObj);
+      showCertificates(message.text, message.chat.id, resObj);
     }
     if (sess.action == "upload"){
-      sendMessage(message.chat.id, "Cool. TBD - Show list of certificates", resObj);  
+      sendMessage(message.chat.id, "Cool. TBD - ask which certificate to upload", resObj);  
     }
   }else{
     sendMessage(message.chat.id, "Sorry, i dont understand that message", resObj);
@@ -90,33 +93,67 @@ function parseCallback(callbackObj, resObj){
 
   if(callbackObj.data && callbackObj.data.toLowerCase() == "upload"){
     sess.action = "upload";
-    showUploadCertificate(callbackObj, resObj);
+    askforUsername(callbackObj, resObj);
   }
 
   if(callbackObj.data && callbackObj.data.toLowerCase() == "view"){
     sess.action = "view";
-    showViewCertificates(callbackObj, resObj);
+    askforUsername(callbackObj, resObj);
   }
 };
 
-function showUploadCertificate(){
-
-};
-
-function showViewCertificates(callbackObj, resObj){
+function askforUsername(callbackObj, resObj){
   var forceReply = JSON.stringify(
                         {force_reply:true}
                       );
   answerCallbackQuery(callbackObj.message.chat.id, resObj);
   sendMessage(callbackObj.message.chat.id, "Absolutely! Just tell me your outlook id without @deloitte.com:", resObj, forceReply);
+}
+
+function showUploadCertificate(){
+
 };
 
-function sendMessage(chatID, responseMsg, resObj, inlineKeyboardMarkup=''){
+function showCertificates(username, chatId, respObj){
+  console.log("showCertificates user == "+username);
+
+  mongodb.MongoClient.connect(mongoURI, function(err, client) {
+
+    if(err) throw err;
+
+    /*
+     * Get the database from the client. Nothing is required to create a
+     * new database, it is created automatically when we insert.
+     */
+
+    let db = client.db('fecertificates');
+    const collection = db.collection('certificates');
+
+    collection.find({'user': username}).toArray(function(err, docs) {
+      console.log("Found the following records");
+      console.log(docs);
+
+      let chatMessage = "<b>Previously Uploaded Certificates for :"+username+"</b>"+
+                        "<i>"+docs+"</i>";
+
+      sendMessage(chatId, chatMessage, respObj);
+    });
+
+    client.close();
+
+    });
+
+
+};
+
+
+function sendMessage(chatID, responseMsg, resObj, inlineKeyboardMarkup='', parseMode=''){
   
   axios.post('https://api.telegram.org/bot553303104:AAEVsFhPt0fa8Yw2jJIEcvOOMd7RAmqWjaE/sendMessage', {
       chat_id: chatID,
       text: responseMsg,
-      reply_markup: inlineKeyboardMarkup
+      reply_markup: inlineKeyboardMarkup,
+      parse_mode: parseMode
     })
     .then(response => {
       // We get here if the message was successfully posted
