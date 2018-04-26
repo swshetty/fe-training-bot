@@ -133,8 +133,8 @@ function showCertificates(username, chatId, respObj){
       console.log("Found the following records");
       console.log(docs);
 
-      let chatMessage = "<pre><b>Previously Uploaded Certificates for : "+username+"</b>"+
-                          "<i>"+docs[0].certificates.toString()+"</i></pre>";
+      let chatMessage = "<b>Previously Uploaded Certificates for : "+username+"</b>"+
+                          "<i>"+docs[0].certificates.toString()+"</i>";
 
       sendMessage(chatId, chatMessage, respObj, undefined,'HTML');
 
